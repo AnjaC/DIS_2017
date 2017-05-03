@@ -20,4 +20,5 @@
 			<property name="garten" type="boolean" column="garten" />
 		</union-subclass>
 	</class>
+	<query name="alle_haeuser">from Haus</query>
 </hibernate-mapping>

@@ -1,10 +1,16 @@
 package de.dis2013.data;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
 import de.dis2013.util.Helper;
 
 /**
  * Kaufvertrags-Bean
  */
+@Entity
+@Table(name="Kaufvertrag")
 public class Kaufvertrag extends Vertrag {
 	private int anzahlRaten;
 	private int ratenzins;
@@ -13,20 +19,21 @@ public class Kaufvertrag extends Vertrag {
 	public Kaufvertrag() {
 		super();
 	}
-	
+	@Column(name="anzahlRaten", nullable=false)		
 	public int getAnzahlRaten() {
 		return anzahlRaten;
 	}
 	public void setAnzahlRaten(int anzahlRaten) {
 		this.anzahlRaten = anzahlRaten;
 	}
+	@Column(name="Ratenzins", nullable=false)	
 	public int getRatenzins() {
 		return ratenzins;
 	}
 	public void setRatenzins(int ratenzins) {
 		this.ratenzins = ratenzins;
 	}
-	
+	@Column(name="Haus", nullable=false)	
 	public Haus getHaus() {
 		return haus;
 	}

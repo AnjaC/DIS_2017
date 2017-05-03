@@ -403,26 +403,26 @@ public class ImmoService {
 		session.save(m);
 		session.getTransaction().commit();
 
-//		session.beginTransaction();
-//		
-//		Person p1 = new Person();
-//		p1.setAdresse("Informatikum");
-//		p1.setNachname("Mustermann");
-//		p1.setVorname("Erika");
-//		
-//		
-//		Person p2 = new Person();
-//		p2.setAdresse("Reeperbahn 9");
-//		p2.setNachname("Albers");
-//		p2.setVorname("Hans");
-//		
-//		session.save(p1);
-//		session.save(p2);
-//		
-//		//TODO: Diese Personen werden im Speicher und der DB gehalten
-//		this.addPerson(p1);
-//		this.addPerson(p2);
-//		session.getTransaction().commit();
+		session.beginTransaction();
+		
+		Person p1 = new Person();
+		p1.setAdresse("Informatikum");
+		p1.setNachname("Mustermann");
+		p1.setVorname("Erika");
+		
+		
+		Person p2 = new Person();
+		p2.setAdresse("Reeperbahn 9");
+		p2.setNachname("Albers");
+		p2.setVorname("Hans");
+		
+		session.save(p1);
+		session.save(p2);
+		
+		//TODO: Diese Personen werden im Speicher und der DB gehalten
+		this.addPerson(p1);
+		this.addPerson(p2);
+		session.getTransaction().commit();
 		
 		//Hibernate Session erzeugen
 		session.beginTransaction();
@@ -455,52 +455,52 @@ public class ImmoService {
 			System.out.println("Immo: "+i.getOrt());
 		}
 		session.close();
-//		
-//		Wohnung w = new Wohnung();
-//		w.setOrt("Hamburg");
-//		w.setPlz(22527);
-//		w.setStrasse("Vogt-Kölln-Straße");
-//		w.setHausnummer("3");
-//		w.setFlaeche(120);
-//		w.setStockwerk(4);
-//		w.setMietpreis(790);
-//		w.setEbk(true);
-//		w.setBalkon(false);
-//		w.setVerwalter(m);
-//		this.addWohnung(w);
-//		
-//		w = new Wohnung();
-//		w.setOrt("Berlin");
-//		w.setPlz(22527);
-//		w.setStrasse("Vogt-Kölln-Straße");
-//		w.setHausnummer("3");
-//		w.setFlaeche(120);
-//		w.setStockwerk(4);
-//		w.setMietpreis(790);
-//		w.setEbk(true);
-//		w.setBalkon(false);
-//		w.setVerwalter(m);
-//		this.addWohnung(w);
-//		
-//		Kaufvertrag kv = new Kaufvertrag();
-//		kv.setHaus(h);
-//		kv.setVertragspartner(p1);
-//		kv.setVertragsnummer(9234);
-//		kv.setDatum(new Date(System.currentTimeMillis()));
-//		kv.setOrt("Hamburg");
-//		kv.setAnzahlRaten(5);
-//		kv.setRatenzins(4);
-//		this.addKaufvertrag(kv);
-//		
-//		Mietvertrag mv = new Mietvertrag();
-//		mv.setWohnung(w);
-//		mv.setVertragspartner(p2);
-//		mv.setVertragsnummer(23112);
-//		mv.setDatum(new Date(System.currentTimeMillis()-1000000000));
-//		mv.setOrt("Berlin");
-//		mv.setMietbeginn(new Date(System.currentTimeMillis()));
-//		mv.setNebenkosten(65);
-//		mv.setDauer(36);
-//		this.addMietvertrag(mv);
+		
+		Wohnung w = new Wohnung();
+		w.setOrt("Hamburg");
+		w.setPlz(22527);
+		w.setStrasse("Vogt-Kölln-Straße");
+		w.setHausnummer("3");
+		w.setFlaeche(120);
+		w.setStockwerk(4);
+		w.setMietpreis(790);
+		w.setEbk(true);
+		w.setBalkon(false);
+		w.setVerwalter(m);
+		this.addWohnung(w);
+		
+		w = new Wohnung();
+		w.setOrt("Berlin");
+		w.setPlz(22527);
+		w.setStrasse("Vogt-Kölln-Straße");
+		w.setHausnummer("3");
+		w.setFlaeche(120);
+		w.setStockwerk(4);
+		w.setMietpreis(790);
+		w.setEbk(true);
+		w.setBalkon(false);
+		w.setVerwalter(m);
+		this.addWohnung(w);
+		
+		Kaufvertrag kv = new Kaufvertrag();
+		kv.setHaus(h);
+		kv.setVertragspartner(p1);
+		kv.setVertragsnummer(9234);
+		kv.setDatum(new Date(System.currentTimeMillis()));
+		kv.setOrt("Hamburg");
+		kv.setAnzahlRaten(5);
+		kv.setRatenzins(4);
+		this.addKaufvertrag(kv);
+		
+		Mietvertrag mv = new Mietvertrag();
+		mv.setWohnung(w);
+		mv.setVertragspartner(p2);
+		mv.setVertragsnummer(23112);
+		mv.setDatum(new Date(System.currentTimeMillis()-1000000000));
+		mv.setOrt("Berlin");
+		mv.setMietbeginn(new Date(System.currentTimeMillis()));
+		mv.setNebenkosten(65);
+		mv.setDauer(36);
+		this.addMietvertrag(mv);
 	}
 }

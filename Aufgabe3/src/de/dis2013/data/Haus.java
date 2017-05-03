@@ -9,7 +9,7 @@ public class Haus extends Immobilie {
 	private int stockwerke;
 	private int kaufpreis;
 	private boolean garten;
-	
+
 	public Haus() {
 		super();
 	}
@@ -32,6 +32,13 @@ public class Haus extends Immobilie {
 	public void setGarten(boolean garten) {
 		this.garten = garten;
 	}
+	 @Override
+	  public String toString()
+	  {
+		
+		String haus="Stockwerke:"+this.stockwerke+" "+"Kaufpreis:"+this.kaufpreis+" "+"Garten:"+this.garten+
+				"Ort:"+this.getOrt()+" "+"PLZ:"+this.getPlz()+"Strasse:"+this.getStrasse()+""+"Hausnummer"+this.getHausnummer()+""+"Verwalter:"+this.getVerwalter()+" "+"Flaeche:"+this.getFlaeche()+" "+"ID:"+this.getId();
+	    return haus;}
 	
 	public int hashCode() {
 		final int prime = 31;

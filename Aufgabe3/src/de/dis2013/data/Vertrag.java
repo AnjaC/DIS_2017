@@ -2,7 +2,11 @@ package de.dis2013.data;
 
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.Table;
 
 import de.dis2013.util.Helper;
@@ -10,7 +14,6 @@ import de.dis2013.util.Helper;
 /**
  * Vertrags-Bean
  */
-
 public abstract class Vertrag {
 	private int vertragsnummer = -1;
 	private Date datum;
@@ -22,26 +25,28 @@ public abstract class Vertrag {
 	public Vertrag() {
 		this.id = currentId++;
 	}
-	
+	@Column(name="Vertragsnummer", nullable=false)	
 	public int getVertragsnummer() {
 		return vertragsnummer;
 	}
 	public void setVertragsnummer(int vertragsnummer) {
 		this.vertragsnummer = vertragsnummer;
 	}
+	@Column(name="Datum", nullable=false)	
 	public Date getDatum() {
 		return datum;
 	}
 	public void setDatum(Date datum) {
 		this.datum = datum;
 	}
+	@Column(name="Ort", nullable=false)	
 	public String getOrt() {
 		return ort;
 	}
 	public void setOrt(String ort) {
 		this.ort = ort;
 	}
-	
+	@Column(name="id", nullable=false)	
 	public int getId() {
 		return id;
 	}
@@ -49,7 +54,7 @@ public abstract class Vertrag {
 	public void setId(int id) {
 		this.id = id;
 	}
-
+	@Column(name="Vertragspartner", nullable=false)	
 	public Person getVertragspartner() {
 		return vertragspartner;
 	}

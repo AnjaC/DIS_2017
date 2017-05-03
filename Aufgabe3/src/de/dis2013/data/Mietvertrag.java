@@ -2,11 +2,20 @@ package de.dis2013.data;
 
 import java.util.Date;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
 import de.dis2013.util.Helper;
 
 /**
  * Mietvertrags-Bean
  */
+@Entity
+@Table(name="Mietvertrag")
 public class Mietvertrag extends Vertrag {
 	private Date mietbeginn;
 	private int dauer;
@@ -16,26 +25,30 @@ public class Mietvertrag extends Vertrag {
 	public Mietvertrag() {
 		super();
 	}
-	
+
+	@Column(name="Mietbeginn", nullable=false)	
 	public Date getMietbeginn() {
 		return mietbeginn;
 	}
+
 	public void setMietbeginn(Date mietbeginn) {
 		this.mietbeginn = mietbeginn;
 	}
+	@Column(name="Dauer", nullable=false)	
 	public int getDauer() {
 		return dauer;
 	}
 	public void setDauer(int dauer) {
 		this.dauer = dauer;
 	}
+	@Column(name="Nebenkosten", nullable=false)	
 	public int getNebenkosten() {
 		return nebenkosten;
 	}
 	public void setNebenkosten(int nebenkosten) {
 		this.nebenkosten = nebenkosten;
 	}
-	
+	@Column(name="Wohnung", nullable=false)	
 	public Wohnung getWohnung() {
 		return wohnung;
 	}

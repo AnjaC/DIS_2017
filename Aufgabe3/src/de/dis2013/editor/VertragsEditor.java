@@ -1,7 +1,13 @@
 package de.dis2013.editor;
 
 import java.util.Iterator;
+import java.util.List;
+import java.util.Scanner;
 import java.util.Set;
+
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.cfg.Configuration;
 
 import de.dis2013.core.ImmoService;
 import de.dis2013.data.Haus;
@@ -21,6 +27,10 @@ import de.dis2013.util.Helper;
  * Klasse für die Menüs zur Verwaltung von Verträgen
  */
 public class VertragsEditor {
+	private static final SessionFactory sessionFactory;
+	static{
+		sessionFactory=new Configuration().configure().buildSessionFactory();
+	}
 	///Immobilien-Service, der genutzt werden soll
 	private ImmoService service;
 	
@@ -107,78 +117,148 @@ public class VertragsEditor {
 	 * Menü zum anlegen eines neuen Mietvertrags
 	 */
 	public void newMietvertrag() {
-		//Alle Wohnungen des Maklers finden
-		Set<Wohnung> wohnungen = service.getAllWohnungenForMakler(verwalter);
+		Session session=sessionFactory.getCurrentSession();
+		session.beginTransaction();
+		Mietvertrag m = new Mietvertrag();
 		
-		//Auswahlmenü für die Wohnungen 
-		AppartmentSelectionMenu asm = new AppartmentSelectionMenu("Wohnung für Vertrag auswählen", wohnungen);
-		int wid = asm.show();
-		
-		//Falls kein Abbruch: Auswahl der Person
-		if(wid != AppartmentSelectionMenu.BACK) {
-			//Alle Personen laden
-			Set<Person> personen = service.getAllPersons();
-			
-			//Menü zur Auswahl der Person
-			PersonSelectionMenu psm = new PersonSelectionMenu("Person für Vertrag auswählen", personen);
-			int pid = psm.show();
-			
-			//Falls kein Abbruch: Vertragsdaten abfragen und Vertrag anlegen
-			if(pid != PersonSelectionMenu.BACK) {
-				Mietvertrag m = new Mietvertrag();
-		
-				m.setWohnung(service.getWohnungById(wid));
-				m.setVertragspartner(service.getPersonById(pid));
-				m.setVertragsnummer(FormUtil.readInt("Vertragsnummer"));
-				m.setDatum(FormUtil.readDate("Datum"));
-				m.setOrt(FormUtil.readString("Ort"));
-				m.setMietbeginn(FormUtil.readDate("Mietbeginn"));
-				m.setDauer(FormUtil.readInt("Dauer in Monaten"));
-				m.setNebenkosten(FormUtil.readInt("Nebenkosten"));
-				
-				service.addMietvertrag(m);
-				
-				System.out.println("Mietvertrag mit der ID "+m.getId()+" wurde erzeugt.");
-			}
+		m.setDatum(FormUtil.readDate("Datum"));
+		m.setOrt(FormUtil.readString("Ort"));
+		m.setId(FormUtil.readInt("ID"));
+		m.setMietbeginn(FormUtil.readDate("Mietbeginn"));
+		m.setDauer(FormUtil.readInt("Dauer"));
+		m.setNebenkosten(FormUtil.readInt("Nebenkosten"));
+		List<Person> listPersonen = session.getNamedQuery("alle_Personen").list();
+
+		for (Person person : listPersonen)
+		{
+
+			System.out.println(person);
 		}
-	}
+		
+		System.out.println("Geben den ID der Person ein:");
+		Scanner scan= new Scanner(System.in);
+		int id=scan.nextInt();
+		Person person=(Person)session.get(Person.class, id);
+		m.setVertragspartner(person);
+		session.save(m);
+//		
+//		System.out.println("Geben den ID der Wohnung ein:");
+//		int wid=scan.nextInt();
+//		Wohnung wohnung=(Wohnung)session.get(Wohnung.class, wid);
+//		m.setWohnung(wohnung);
+//		session.save(m);
+		
+		session.getTransaction().commit();}
+		//Alle Wohnungen des Maklers finden
+//		Set<Wohnung> wohnungen = service.getAllWohnungenForMakler(verwalter);
+//		
+//		//Auswahlmenü für die Wohnungen 
+//		AppartmentSelectionMenu asm = new AppartmentSelectionMenu("Wohnung für Vertrag auswählen", wohnungen);
+//		int wid = asm.show();
+//		
+//		//Falls kein Abbruch: Auswahl der Person
+//		if(wid != AppartmentSelectionMenu.BACK) {
+//			//Alle Personen laden
+//			Set<Person> personen = service.getAllPersons();
+//			
+//			//Menü zur Auswahl der Person
+//			PersonSelectionMenu psm = new PersonSelectionMenu("Person für Vertrag auswählen", personen);
+//			int pid = psm.show();
+//			
+//			//Falls kein Abbruch: Vertragsdaten abfragen und Vertrag anlegen
+//			if(pid != PersonSelectionMenu.BACK) {
+//				Mietvertrag m = new Mietvertrag();
+//		
+//				m.setWohnung(service.getWohnungById(wid));
+//				m.setVertragspartner(service.getPersonById(pid));
+//				m.setVertragsnummer(FormUtil.readInt("Vertragsnummer"));
+//				m.setDatum(FormUtil.readDate("Datum"));
+//				m.setOrt(FormUtil.readString("Ort"));
+//				m.setMietbeginn(FormUtil.readDate("Mietbeginn"));
+//				m.setDauer(FormUtil.readInt("Dauer in Monaten"));
+//				m.setNebenkosten(FormUtil.readInt("Nebenkosten"));
+//				
+//				service.addMietvertrag(m);
+//				
+//				System.out.println("Mietvertrag mit der ID "+m.getId()+" wurde erzeugt.");
+//			}
+//		}}
+	
 	
 	/**
 	 * Menü zum anlegen eines neuen Kaufvertrags
 	 */
 	public void newKaufvertrag() {
-		//Alle Häuser des Maklers finden
-		Set<Haus> haeuser = service.getAllHaeuserForMakler(verwalter);
+		Session session=sessionFactory.getCurrentSession();
+		session.beginTransaction();
+		Kaufvertrag k = new Kaufvertrag();
 		
-		//Auswahlmenü für das Haus
-		HouseSelectionMenu asm = new HouseSelectionMenu("Haus für Vertrag auswählen", haeuser);
-		int hid = asm.show();
-		
-		//Falls kein Abbruch: Auswahl der Person
-		if(hid != AppartmentSelectionMenu.BACK) {
-			//Alle Personen laden
-			Set<Person> personen = service.getAllPersons();
-			
-			//Menü zur Auswahl der Person
-			PersonSelectionMenu psm = new PersonSelectionMenu("Person für Vertrag auswählen", personen);
-			int pid = psm.show();
-			
-			//Falls kein Abbruch: Vertragsdaten abfragen und Vertrag anlegen
-			if(pid != PersonSelectionMenu.BACK) {
-				Kaufvertrag k = new Kaufvertrag();
-		
-				k.setHaus(service.getHausById(hid));
-				k.setVertragspartner(service.getPersonById(pid));
-				k.setVertragsnummer(FormUtil.readInt("Vertragsnummer"));
-				k.setDatum(FormUtil.readDate("Datum"));
-				k.setOrt(FormUtil.readString("Ort"));
-				k.setAnzahlRaten(FormUtil.readInt("Anzahl Raten"));
-				k.setRatenzins(FormUtil.readInt("Ratenzins"));
-				
-				service.addKaufvertrag(k);
-				
-				System.out.println("Kaufvertrag mit der ID "+k.getId()+" wurde erzeugt.");
-			}
+		k.setDatum(FormUtil.readDate("Datum"));
+		k.setOrt(FormUtil.readString("Ort"));
+		k.setAnzahlRaten(FormUtil.readInt("Anzahl Raten"));
+		k.setRatenzins(FormUtil.readInt("Ratenzins"));
+		List<Person> listPersonen = session.getNamedQuery("alle_Personen").list();
+
+		for (Person person : listPersonen)
+		{
+
+			System.out.println(person);
 		}
-	}
+		
+		System.out.println("Geben den ID der Person ein:");
+		Scanner scan= new Scanner(System.in);
+		int id=scan.nextInt();
+		Person person=(Person)session.get(Person.class, id);
+		k.setVertragspartner(person);
+		
+		List<Haus> listhaeuser = session.getNamedQuery("alle_haeuser").list();
+
+		for (Haus haus: listhaeuser)
+		{
+
+			System.out.println(haus);
+		}
+		
+		System.out.println("Geben den ID des Haus ein:");
+		int hid=scan.nextInt();
+		Haus haus=(Haus)session.get(Haus.class, hid);
+		k.setHaus(haus);
+
+		
+		session.save(k);
+	session.getTransaction().commit();}
+//		//Alle Häuser des Maklers finden
+//		Set<Haus> haeuser = service.getAllHaeuserForMakler(verwalter);
+//		
+//		//Auswahlmenü für das Haus
+//		HouseSelectionMenu asm = new HouseSelectionMenu("Haus für Vertrag auswählen", haeuser);
+//		int hid = asm.show();
+//		
+//		//Falls kein Abbruch: Auswahl der Person
+//		if(hid != AppartmentSelectionMenu.BACK) {
+//			//Alle Personen laden
+//			Set<Person> personen = service.getAllPersons();
+//			
+//			//Menü zur Auswahl der Person
+//			PersonSelectionMenu psm = new PersonSelectionMenu("Person für Vertrag auswählen", personen);
+//			int pid = psm.show();
+//			
+//			//Falls kein Abbruch: Vertragsdaten abfragen und Vertrag anlegen
+//			if(pid != PersonSelectionMenu.BACK) {
+//				Kaufvertrag k = new Kaufvertrag();
+//		
+//				k.setHaus(service.getHausById(hid));
+//				k.setVertragspartner(service.getPersonById(pid));
+//				k.setVertragsnummer(FormUtil.readInt("Vertragsnummer"));
+//				k.setDatum(FormUtil.readDate("Datum"));
+//				k.setOrt(FormUtil.readString("Ort"));
+//				k.setAnzahlRaten(FormUtil.readInt("Anzahl Raten"));
+//				k.setRatenzins(FormUtil.readInt("Ratenzins"));
+//				
+//				service.addKaufvertrag(k);
+//				
+//				System.out.println("Kaufvertrag mit der ID "+k.getId()+" wurde erzeugt.");
+//			}
+//		}
+//	}
 }

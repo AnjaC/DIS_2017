@@ -64,6 +64,7 @@ public abstract class Immobilie {
 		return verwalter;
 	}
 
+
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
