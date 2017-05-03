@@ -73,11 +73,16 @@ public class Makler {
 	public Set<Immobilie> getImmobilien() {
 		return immobilien;
 	}
-
+	@Column(name="Immobilie", nullable=false)	
 	public void setImmobilien(Set<Immobilie> immobilien) {
 		this.immobilien = immobilien;
 	}
-
+	 @Override
+	  public String toString()
+	  {
+		String makler="Name:"+this.name+""+"ID:"+this.id;
+	    return makler;
+	  }
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;

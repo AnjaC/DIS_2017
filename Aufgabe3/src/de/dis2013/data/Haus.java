@@ -1,10 +1,19 @@
 package de.dis2013.data;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
 import de.dis2013.util.Helper;
 
 /**
  * Haus-Bean
  */
+@Entity
+@Table(name="haeuser")
 public class Haus extends Immobilie {
 	private int stockwerke;
 	private int kaufpreis;
@@ -13,22 +22,27 @@ public class Haus extends Immobilie {
 	public Haus() {
 		super();
 	}
-	
+	@Column(name="Stockwerke", nullable=false)
 	public int getStockwerke() {
 		return stockwerke;
 	}
+		
 	public void setStockwerke(int stockwerke) {
 		this.stockwerke = stockwerke;
 	}
+	@Column(name="Kaufpreis", nullable=false)	
 	public int getKaufpreis() {
 		return kaufpreis;
 	}
+
 	public void setKaufpreis(int kaufpreis) {
 		this.kaufpreis = kaufpreis;
 	}
+	@Column(name="Garten", nullable=false)	
 	public boolean isGarten() {
 		return garten;
 	}
+
 	public void setGarten(boolean garten) {
 		this.garten = garten;
 	}

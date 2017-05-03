@@ -56,6 +56,13 @@ public class Mietvertrag extends Vertrag {
 	public void setWohnung(Wohnung wohnung) {
 		this.wohnung = wohnung;
 	}
+	@Override
+	  public String toString()
+	  {
+		String mietvertrag="Vertragsnummer:"+this.getVertragsnummer()+""+"Datum:"+this.getDatum()+"Ort:"+this.getOrt()+"ID:"+this.id+"mietbeginn"+this.mietbeginn+"dauer"+this.dauer+"Nebenkosten"+this.nebenkosten+"Wohnung"+this.wohnung;
+	    return mietvertrag;
+	  }
+
 
 	public int hashCode() {
 		final int prime = 31;

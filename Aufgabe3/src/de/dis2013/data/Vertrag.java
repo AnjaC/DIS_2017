@@ -46,7 +46,9 @@ public abstract class Vertrag {
 	public void setOrt(String ort) {
 		this.ort = ort;
 	}
-	@Column(name="id", nullable=false)	
+	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)
+	@Column(name="id")
 	public int getId() {
 		return id;
 	}

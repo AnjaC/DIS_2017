@@ -1,46 +1,56 @@
 package de.dis2013.data;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
 import de.dis2013.util.Helper;
 
 
 /**
  * Wohnungs-Bean
  */
+@Entity
+@Table(name="wohnungen")
 public class Wohnung extends Immobilie {
 	private int stockwerk;
 	private int mietpreis;
 	private int zimmer;
 	private boolean balkon;
 	private boolean ebk;
-	
+
 	public Wohnung() {
 		super();
 	}
-	
+@Column(name="stockwerk", nullable=false)	
 	public int getStockwerk() {
 		return stockwerk;
 	}
 	public void setStockwerk(int stockwerk) {
 		this.stockwerk = stockwerk;
 	}
+	@Column(name="mietpreis", nullable=false)	
 	public int getMietpreis() {
 		return mietpreis;
 	}
 	public void setMietpreis(int mietpreis) {
 		this.mietpreis = mietpreis;
 	}
+	@Column(name="zimmer", nullable=false)	
 	public int getZimmer() {
 		return zimmer;
 	}
 	public void setZimmer(int zimmer) {
 		this.zimmer = zimmer;
 	}
+	@Column(name="balkon", nullable=false)	
 	public boolean isBalkon() {
 		return balkon;
 	}
 	public void setBalkon(boolean balkon) {
 		this.balkon = balkon;
 	}
+	@Column(name="ebk", nullable=false)	
 	public boolean isEbk() {
 		return ebk;
 	}

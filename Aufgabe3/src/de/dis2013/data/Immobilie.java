@@ -1,10 +1,18 @@
 package de.dis2013.data;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
 import de.dis2013.util.Helper;
 
 /**
  * Immobilien-Bean
  */
+
 public abstract class Immobilie {
 	private int id = -1;
 	private String ort;
@@ -18,37 +26,44 @@ public abstract class Immobilie {
 	public Immobilie() {
 		this.id = currentId++;
 	}
-	
+	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)
+	@Column(name="id")
 	public int getId() {
 		return id;
 	}
 	public void setId(int id) {
 		this.id = id;
 	}
+	@Column(name="Ort", nullable=false)	
 	public String getOrt() {
 		return ort;
 	}
 	public void setOrt(String ort) {
 		this.ort = ort;
 	}
+	@Column(name="PLZ", nullable=false)	
 	public int getPlz() {
 		return plz;
 	}
 	public void setPlz(int plz) {
 		this.plz = plz;
 	}
+	@Column(name="Strasse", nullable=false)	
 	public String getStrasse() {
 		return strasse;
 	}
 	public void setStrasse(String strasse) {
 		this.strasse = strasse;
 	}
+	@Column(name="Hausnummer", nullable=false)	
 	public String getHausnummer() {
 		return hausnummer;
 	}
 	public void setHausnummer(String hausnummer) {
 		this.hausnummer = hausnummer;
 	}
+	@Column(name="Flaeche", nullable=false)	
 	public int getFlaeche() {
 		return flaeche;
 	}
@@ -59,7 +74,7 @@ public abstract class Immobilie {
 	public void setVerwalter(Makler verwalter) {
 		this.verwalter = verwalter;
 	}
-
+	@Column(name="Verwalter", nullable=false)	
 	public Makler getVerwalter() {
 		return verwalter;
 	}

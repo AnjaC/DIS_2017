@@ -81,36 +81,57 @@ public class VertragsEditor {
 	}
 	
 	public void zeigeVertraege() {
-		//Mietverträge anzeigen
-		System.out.println("Mietverträge\n-----------------");
-		Set<Mietvertrag> mvs = service.getAllMietvertraegeForMakler(verwalter);
-		Iterator<Mietvertrag> itmv = mvs.iterator();
-		while(itmv.hasNext()) {
-			Mietvertrag mv = itmv.next();
-			System.out.println("Mietvertrag "+mv.getVertragsnummer()+"\n"+
-							"\tGeschlossen am "+Helper.dateToString(mv.getDatum())+" in "+mv.getOrt()+"\n"+
-							"\tMieter:        "+mv.getVertragspartner().getVorname()+" "+mv.getVertragspartner().getNachname()+"\n"+
-							"\tWohnung:       "+mv.getWohnung().getStrasse()+" "+mv.getWohnung().getHausnummer()+", "+mv.getWohnung().getPlz()+" "+mv.getWohnung().getOrt()+"\n"+
-							"\tMietbeginn:    "+Helper.dateToString(mv.getMietbeginn())+", Dauer: "+mv.getDauer()+" Monate\n"+
-							"\tMietpreis:     "+mv.getWohnung().getMietpreis()+" Euro, Nebenkosten: "+mv.getNebenkosten()+" Euro\n");
+		Session session=sessionFactory.getCurrentSession();
+		session.beginTransaction();
+		List<Mietvertrag> listMietvertrag = session.getNamedQuery("alle_Vertraege1").list();
+		System.out.println("Mietverträge:");
+
+		for (Mietvertrag vertrag : listMietvertrag)
+		{
+
+			System.out.println(vertrag);
 		}
-		
-		System.out.println("");
-		
-		//Kaufverträge anzeigen
-		System.out.println("Kaufverträge\n-----------------");
-		Set<Kaufvertrag> kvs = service.getAllKaufvertraegeForMakler(verwalter);
-		Iterator<Kaufvertrag> itkv = kvs.iterator();
-		while(itkv.hasNext()) {
-			Kaufvertrag kv = itkv.next();
-			System.out.println("Kaufvertrag "+kv.getVertragsnummer()+"\n"+
-							"\tGeschlossen am "+Helper.dateToString(kv.getDatum())+" in "+kv.getOrt()+"\n"+
-							"\tMieter:        "+kv.getVertragspartner().getVorname()+" "+kv.getVertragspartner().getNachname()+"\n"+
-							"\tHaus:          "+kv.getHaus().getStrasse()+" "+kv.getHaus().getHausnummer()+", "+kv.getHaus().getPlz()+" "+kv.getHaus().getOrt()+"\n"+
-							"\tKaufpreis:     "+kv.getHaus().getKaufpreis()+" Euro\n"+
-							"\tRaten:         "+kv.getAnzahlRaten()+", Ratenzins: "+kv.getRatenzins()+"%\n");
+		List<Kaufvertrag> listkaufvertrag = session.getNamedQuery("alle_Vertraege2").list();
+		System.out.println("Kaufverträge:");
+
+		for (Kaufvertrag vertrag : listkaufvertrag)
+		{
+
+			System.out.println(vertrag);
 		}
+		session.getTransaction().commit();
+		
 	}
+//		//Mietverträge anzeigen
+//		System.out.println("Mietverträge\n-----------------");
+//		Set<Mietvertrag> mvs = service.getAllMietvertraegeForMakler(verwalter);
+//		Iterator<Mietvertrag> itmv = mvs.iterator();
+//		while(itmv.hasNext()) {
+//			Mietvertrag mv = itmv.next();
+//			System.out.println("Mietvertrag "+mv.getVertragsnummer()+"\n"+
+//							"\tGeschlossen am "+Helper.dateToString(mv.getDatum())+" in "+mv.getOrt()+"\n"+
+//							"\tMieter:        "+mv.getVertragspartner().getVorname()+" "+mv.getVertragspartner().getNachname()+"\n"+
+//							"\tWohnung:       "+mv.getWohnung().getStrasse()+" "+mv.getWohnung().getHausnummer()+", "+mv.getWohnung().getPlz()+" "+mv.getWohnung().getOrt()+"\n"+
+//							"\tMietbeginn:    "+Helper.dateToString(mv.getMietbeginn())+", Dauer: "+mv.getDauer()+" Monate\n"+
+//							"\tMietpreis:     "+mv.getWohnung().getMietpreis()+" Euro, Nebenkosten: "+mv.getNebenkosten()+" Euro\n");
+//		}
+//		
+//		System.out.println("");
+//		
+//		//Kaufverträge anzeigen
+//		System.out.println("Kaufverträge\n-----------------");
+//		Set<Kaufvertrag> kvs = service.getAllKaufvertraegeForMakler(verwalter);
+//		Iterator<Kaufvertrag> itkv = kvs.iterator();
+//		while(itkv.hasNext()) {
+//			Kaufvertrag kv = itkv.next();
+//			System.out.println("Kaufvertrag "+kv.getVertragsnummer()+"\n"+
+//							"\tGeschlossen am "+Helper.dateToString(kv.getDatum())+" in "+kv.getOrt()+"\n"+
+//							"\tMieter:        "+kv.getVertragspartner().getVorname()+" "+kv.getVertragspartner().getNachname()+"\n"+
+//							"\tHaus:          "+kv.getHaus().getStrasse()+" "+kv.getHaus().getHausnummer()+", "+kv.getHaus().getPlz()+" "+kv.getHaus().getOrt()+"\n"+
+//							"\tKaufpreis:     "+kv.getHaus().getKaufpreis()+" Euro\n"+
+//							"\tRaten:         "+kv.getAnzahlRaten()+", Ratenzins: "+kv.getRatenzins()+"%\n");
+//		}
+//	}
 	
 	
 	/**
@@ -142,11 +163,11 @@ public class VertragsEditor {
 		m.setVertragspartner(person);
 		session.save(m);
 //		
-//		System.out.println("Geben den ID der Wohnung ein:");
-//		int wid=scan.nextInt();
-//		Wohnung wohnung=(Wohnung)session.get(Wohnung.class, wid);
-//		m.setWohnung(wohnung);
-//		session.save(m);
+		System.out.println("Geben den ID der Wohnung ein:");
+		int wid=scan.nextInt();
+		Wohnung wohnung=(Wohnung)session.get(Wohnung.class, wid);
+		m.setWohnung(wohnung);
+		session.save(m);
 		
 		session.getTransaction().commit();}
 		//Alle Wohnungen des Maklers finden

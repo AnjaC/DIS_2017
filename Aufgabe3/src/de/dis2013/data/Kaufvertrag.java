@@ -41,6 +41,12 @@ public class Kaufvertrag extends Vertrag {
 	public void setHaus(Haus haus) {
 		this.haus = haus;
 	}
+	@Override
+	  public String toString()
+	  {
+		String kaufvertrag="Vertragsnummer:"+this.getVertragsnummer()+""+"Datum:"+this.getDatum()+"Ort:"+this.getOrt()+"ID:"+this.id+"anzahlraten"+this.anzahlRaten+"Ratenzins"+this.ratenzins+"Haus"+this.haus;
+	    return kaufvertrag;
+	  }
 
 	public int hashCode() {
 		final int prime = 31;
