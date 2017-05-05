@@ -2,6 +2,8 @@ package de.dis2013.editor;
 
 
 import java.io.Serializable;
+import java.util.List;
+import java.util.Scanner;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -10,6 +12,7 @@ import org.hibernate.cfg.Configuration;
 
 import de.dis2013.core.ImmoService;
 import de.dis2013.data.Makler;
+import de.dis2013.data.Person;
 import de.dis2013.menu.MaklerSelectionMenu;
 import de.dis2013.menu.Menu;
 import de.dis2013.util.FormUtil;
@@ -103,15 +106,28 @@ public class MaklerEditor {
 	 * Berarbeitet einen Makler, nachdem der Benutzer ihn ausgewählt hat
 	 */
 	public void editMakler() {
-		//Menü zum selektieren des Maklers
-		Menu maklerSelectionMenu = new MaklerSelectionMenu("Makler editieren", service.getAllMakler());
-		int id = maklerSelectionMenu.show();
-		
-		//Falls nicht "zurück" gewählt, Makler bearbeiten
-		if(id != MaklerSelectionMenu.BACK) {
-			//Makler laden
-			Makler m = service.getMaklerById(id);
-			System.out.println("Makler "+m.getName()+" wird bearbeitet. Leere Felder bleiben unverändert.");
+		Session session=sessionFactory.getCurrentSession();
+		session.beginTransaction();
+		List<Makler> listMakler = session.getNamedQuery("alle_Makler").list();
+
+		for (Makler makler : listMakler)
+		{
+
+			System.out.println(makler);
+		}
+		System.out.println("Geben den ID des Maklers ein:");
+		Scanner scan= new Scanner(System.in);
+		int id=scan.nextInt();
+		Makler m=(Makler)session.get(Makler.class, id);
+//		//Menü zum selektieren des Maklers
+//		Menu maklerSelectionMenu = new MaklerSelectionMenu("Makler editieren", service.getAllMakler());
+//		int id = maklerSelectionMenu.show();
+//		
+//		//Falls nicht "zurück" gewählt, Makler bearbeiten
+//		if(id != MaklerSelectionMenu.BACK) {
+//			//Makler laden
+//			Makler m = service.getMaklerById(id);
+//			System.out.println("Makler "+m.getName()+" wird bearbeitet. Leere Felder bleiben unverändert.");
 			
 			//Neue Daten abfragen
 			String new_name = FormUtil.readString("Name ("+m.getName()+")");
@@ -128,22 +144,41 @@ public class MaklerEditor {
 				m.setLogin(new_login);
 			if(!new_password.equals(""))
 				m.setPasswort(new_password);
+
+			session.update(m);
+			session.getTransaction().commit();
 		}
-	}
+	
 	
 	/**
 	 * Löscht einen Makler, nachdem der Benutzer
 	 * ihn ausgewählt hat.
 	 */
 	public void deleteMakler() {
-		//Menü zum selektieren des Maklers
-		Menu maklerSelectionMenu = new MaklerSelectionMenu("Makler löschen", service.getAllMakler());
-		int id = maklerSelectionMenu.show();
-		
-		//Makler löschen falls nicht "zurück" ausgewählt wurde
-		if(id != MaklerSelectionMenu.BACK) {
-			Makler m = service.getMaklerById(id);
-			service.deleteMakler(m);
+//		//Menü zum selektieren des Maklers
+//		Menu maklerSelectionMenu = new MaklerSelectionMenu("Makler löschen", service.getAllMakler());
+//		int id = maklerSelectionMenu.show();
+//		
+//		//Makler löschen falls nicht "zurück" ausgewählt wurde
+//		if(id != MaklerSelectionMenu.BACK) {
+//			Makler m = service.getMaklerById(id);
+//			service.deleteMakler(m);
+//		}
+		Session session=sessionFactory.getCurrentSession();
+		session.beginTransaction();
+		List<Makler> listMakler = session.getNamedQuery("alle_Makler").list();
+
+		for (Makler makler : listMakler)
+		{
+
+			System.out.println(makler);
 		}
+		System.out.println("Geben den ID der Person ein:");
+		Scanner scan= new Scanner(System.in);
+		int id=scan.nextInt();
+		Makler m=(Makler)session.get(Makler.class, id);
+		m.setId(id);
+		session.delete(m);
+		session.getTransaction().commit();
 	}
 }
