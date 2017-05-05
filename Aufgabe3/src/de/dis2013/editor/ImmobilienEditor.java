@@ -1,10 +1,17 @@
 package de.dis2013.editor;
 
+import java.util.List;
+import java.util.Scanner;
 import java.util.Set;
+
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.cfg.Configuration;
 
 import de.dis2013.core.ImmoService;
 import de.dis2013.data.Haus;
 import de.dis2013.data.Makler;
+import de.dis2013.data.Person;
 import de.dis2013.data.Wohnung;
 import de.dis2013.menu.AppartmentSelectionMenu;
 import de.dis2013.menu.HouseSelectionMenu;
@@ -15,6 +22,10 @@ import de.dis2013.util.FormUtil;
  * Klasse für die Menüs zur Verwaltung von Immobilien
  */
 public class ImmobilienEditor {
+	private static final SessionFactory sessionFactory;
+	static{
+		sessionFactory=new Configuration().configure().buildSessionFactory();
+	}
 	///Immobilienservice, der genutzt werden soll
 	private ImmoService service;
 	
@@ -84,6 +95,9 @@ public class ImmobilienEditor {
 	 * Abfrage der Daten für ein neues Haus
 	 */
 	public void newHouse() {
+		Session session=sessionFactory.getCurrentSession();
+		session.beginTransaction();
+		
 		Haus h = new Haus();
 		
 		h.setOrt(FormUtil.readString("Ort"));
@@ -94,30 +108,57 @@ public class ImmobilienEditor {
 		h.setStockwerke(FormUtil.readInt("Stockwerke"));
 		h.setKaufpreis(FormUtil.readInt("Kaufpreis"));
 		h.setGarten(FormUtil.readBoolean("Garten"));
-		h.setVerwalter(this.verwalter);
 		
-		service.addHaus(h);
-	}
+		List<Makler> listMakler = session.getNamedQuery("alle_Makler").list();
+
+		for (Makler makler : listMakler)
+		{
+
+			System.out.println(makler);
+		}
+		
+		System.out.println("Geben den ID des Maklers ein:");
+		Scanner scan= new Scanner(System.in);
+		int id=scan.nextInt();
+		Makler makler=(Makler)session.get(Makler.class, id);
+		h.setVerwalter(makler);
+		
+		session.save(h);
+	session.getTransaction().commit();}
+	
 	
 	/**
 	 * Lässt den Benutzer ein Haus zum bearbeiten auswählen
 	 * und fragt anschließend die neuen Daten ab.
 	 */
 	public void editHouse() {
+		Session session=sessionFactory.getCurrentSession();
+		session.beginTransaction();
+		List<Haus> listHaus = session.getNamedQuery("alle_haeuser").list();
+
+		for (Haus h : listHaus)
+		{
+
+			System.out.println(h);
+		}
+		System.out.println("Geben den ID des Hauses ein:");
+		Scanner scan= new Scanner(System.in);
+		int id=scan.nextInt();
+		Haus h=(Haus)session.get(Haus.class, id);
 		//Alle Häuser suchen, die vom Makler verwaltet werden
-		Set<Haus> haeuser = service.getAllHaeuserForMakler(verwalter);
-		
-		//Auswahlmenü für das zu bearbeitende Haus
-		HouseSelectionMenu hsm = new HouseSelectionMenu("Liste der verwalteten Häuser", haeuser);
-		int id = hsm.show();
-		
-		//Falls nicht der Eintrag "zurück" gewählt wurde, Haus bearbeiten
-		if(id != HouseSelectionMenu.BACK) {
-			//Gewähltes Haus laden
-			Haus h = service.getHausById(id);
-			
-			System.out.println("Haus "+h.getStrasse()+" "+h.getHausnummer()+", "+h.getPlz()+" "+h.getOrt()+" wird bearbeitet. Leere Felder bzw. Eingabe von 0 lässt Feld unverändert.");
-			
+//		Set<Haus> haeuser = service.getAllHaeuserForMakler(verwalter);
+//		
+//		//Auswahlmenü für das zu bearbeitende Haus
+//		HouseSelectionMenu hsm = new HouseSelectionMenu("Liste der verwalteten Häuser", haeuser);
+//		int id = hsm.show();
+//		
+//		//Falls nicht der Eintrag "zurück" gewählt wurde, Haus bearbeiten
+//		if(id != HouseSelectionMenu.BACK) {
+//			//Gewähltes Haus laden
+//			Haus h = service.getHausById(id);
+//			
+//			System.out.println("Haus "+h.getStrasse()+" "+h.getHausnummer()+", "+h.getPlz()+" "+h.getOrt()+" wird bearbeitet. Leere Felder bzw. Eingabe von 0 lässt Feld unverändert.");
+//			
 			//Neue Daten abfragen
 			String newOrt = FormUtil.readString("Ort ("+h.getOrt()+")");
 			int newPlz = FormUtil.readInt("PLZ ("+h.getPlz()+")");
@@ -151,32 +192,56 @@ public class ImmobilienEditor {
 				h.setKaufpreis(newKaufpreis);
 			
 			h.setGarten(newGarten);
+			session.update(h);
+			session.getTransaction().commit();
 		}
-	}
+	
 	
 	/**
 	 * Zeigt die Liste von verwalteten Häusern und löscht das
 	 * entsprechende Haus nach Auswahl
 	 */
 	public void deleteHouse() {
-		//Alle Häuser suchen, die vom Makler verwaltet werden
-		Set<Haus> haeuser = service.getAllHaeuserForMakler(verwalter);
-		
-		//Auswahlmenü für das zu bearbeitende Haus
-		HouseSelectionMenu hsm = new HouseSelectionMenu("Liste der verwalteten Häuser", haeuser);
-		int id = hsm.show();
-		
-		//Falls nicht der Eintrag "zurück" gewählt wurde, Haus löschen
-		if(id != HouseSelectionMenu.BACK) {
-			Haus h = service.getHausById(id);
-			service.deleteHouse(h);
+//		//Alle Häuser suchen, die vom Makler verwaltet werden
+//		Set<Haus> haeuser = service.getAllHaeuserForMakler(verwalter);
+//		
+//		//Auswahlmenü für das zu bearbeitende Haus
+//		HouseSelectionMenu hsm = new HouseSelectionMenu("Liste der verwalteten Häuser", haeuser);
+//		int id = hsm.show();
+//		
+//		//Falls nicht der Eintrag "zurück" gewählt wurde, Haus löschen
+//		if(id != HouseSelectionMenu.BACK) {
+//			Haus h = service.getHausById(id);
+//			service.deleteHouse(h);
+		Session session=sessionFactory.getCurrentSession();
+		session.beginTransaction();
+		List<Haus> listHaus = session.getNamedQuery("alle_haeuser").list();
+
+		for (Haus h : listHaus)
+		{
+
+			System.out.println(h);
 		}
+		System.out.println("Geben den ID des Hauses ein:");
+		Scanner scan= new Scanner(System.in);
+		int id=scan.nextInt();
+		Haus h=(Haus)session.get(Haus.class, id);
+		h.setId(id);
+		session.delete(h);
+		session.getTransaction().commit();
+
 	}
+		
+	
 	
 	/**
 	 * Abfrage der Daten für eine neue Wohnung
 	 */
 	public void newAppartment() {
+		Session session=sessionFactory.getCurrentSession();
+		session.beginTransaction();
+		
+
 		Wohnung w = new Wohnung();
 		
 		w.setOrt(FormUtil.readString("Ort"));
@@ -190,28 +255,59 @@ public class ImmobilienEditor {
 		w.setBalkon(FormUtil.readBoolean("Balkon"));
 		w.setVerwalter(this.verwalter);
 		
-		service.addWohnung(w);
+		List<Makler> listMakler = session.getNamedQuery("alle_Makler").list();
+
+		for (Makler makler : listMakler)
+		{
+
+			System.out.println(makler);
+		}
+		
+		System.out.println("Geben den ID des Maklers ein:");
+		Scanner scan= new Scanner(System.in);
+		int id=scan.nextInt();
+		Makler makler=(Makler)session.get(Makler.class, id);
+		w.setVerwalter(makler);
+		
+		session.save(w);
+	session.getTransaction().commit();
 	}
+		
+//		service.addWohnung(w);
+	
 	
 	/**
 	 * Lässt den Benutzer eine Wohnung zum bearbeiten auswählen
 	 * und fragt anschließend die neuen Daten ab.
 	 */
 	public void editAppartment() {
-		//Alle Wohnungen suchen, die vom Makler verwaltet werden
-		Set<Wohnung> wohnungen = service.getAllWohnungenForMakler(verwalter);
-		
-		//Auswahlmenü für die zu bearbeitende Wohnung
-		AppartmentSelectionMenu asm = new AppartmentSelectionMenu("Liste der verwalteten Wohnungen", wohnungen);
-		int id = asm.show();
-		
-		//Falls nicht der Eintrag "zurück" gewählt wurde, Wohnung bearbeiten
-		if(id != AppartmentSelectionMenu.BACK) {
-			//Wohnung laden
-			Wohnung w = service.getWohnungById(id);
-			
-			System.out.println("Haus "+w.getStrasse()+" "+w.getHausnummer()+", "+w.getPlz()+" "+w.getOrt()+" wird bearbeitet. Leere Felder bzw. Eingabe von 0 lässt Feld unverändert.");
-			
+		Session session=sessionFactory.getCurrentSession();
+		session.beginTransaction();
+		List<Wohnung> listWohnung = session.getNamedQuery("alle_wohnungen").list();
+
+		for (Wohnung w : listWohnung)
+		{
+
+			System.out.println(w);
+		}
+		System.out.println("Geben den ID der Wohnung ein:");
+		Scanner scan= new Scanner(System.in);
+		int id=scan.nextInt();
+		Wohnung w=(Wohnung)session.get(Wohnung.class, id);
+//		//Alle Wohnungen suchen, die vom Makler verwaltet werden
+//		Set<Wohnung> wohnungen = service.getAllWohnungenForMakler(verwalter);
+//		
+//		//Auswahlmenü für die zu bearbeitende Wohnung
+//		AppartmentSelectionMenu asm = new AppartmentSelectionMenu("Liste der verwalteten Wohnungen", wohnungen);
+//		int id = asm.show();
+//		
+//		//Falls nicht der Eintrag "zurück" gewählt wurde, Wohnung bearbeiten
+//		if(id != AppartmentSelectionMenu.BACK) {
+//			//Wohnung laden
+//			Wohnung w = service.getWohnungById(id);
+//			
+//			System.out.println("Haus "+w.getStrasse()+" "+w.getHausnummer()+", "+w.getPlz()+" "+w.getOrt()+" wird bearbeitet. Leere Felder bzw. Eingabe von 0 lässt Feld unverändert.");
+//			
 			//Neue Daten abfragen
 			String newOrt = FormUtil.readString("Ort ("+w.getOrt()+")");
 			int newPlz = FormUtil.readInt("PLZ ("+w.getPlz()+")");
@@ -247,25 +343,45 @@ public class ImmobilienEditor {
 			
 			w.setEbk(newEbk);
 			w.setBalkon(newBalkon);
+			session.update(w);
+			session.getTransaction().commit();
 		}
-	}
+	
 	
 	/**
 	 * Zeigt die Liste von verwalteten Wohnungen und löscht die
 	 * entsprechende Wohnung nach Auswahl
 	 */
 	public void deleteAppartment() {
-		//Alle Wohnungen suchen, die vom Makler verwaltet werden
-		Set<Wohnung> wohnungen = service.getAllWohnungenForMakler(verwalter);
-		
-		//Auswahlmenü für die zu bearbeitende Wohnung
-		AppartmentSelectionMenu asm = new AppartmentSelectionMenu("Liste der verwalteten Wohnungen", wohnungen);
-		int id = asm.show();
-		
-		//Falls nicht der Eintrag "zurück" gewählt wurde, Wohnung löschen
-		if(id != HouseSelectionMenu.BACK) {
-			Wohnung w = service.getWohnungById(id);
-			service.deleteWohnung(w);
+//		//Alle Wohnungen suchen, die vom Makler verwaltet werden
+//		Set<Wohnung> wohnungen = service.getAllWohnungenForMakler(verwalter);
+//		
+//		//Auswahlmenü für die zu bearbeitende Wohnung
+//		AppartmentSelectionMenu asm = new AppartmentSelectionMenu("Liste der verwalteten Wohnungen", wohnungen);
+//		int id = asm.show();
+//		
+//		//Falls nicht der Eintrag "zurück" gewählt wurde, Wohnung löschen
+//		if(id != HouseSelectionMenu.BACK) {
+//			Wohnung w = service.getWohnungById(id);
+//			service.deleteWohnung(w);
+//		}
+//	}
+//}
+		Session session=sessionFactory.getCurrentSession();
+		session.beginTransaction();
+		List<Wohnung> listWohnung = session.getNamedQuery("alle_wohnungen").list();
+
+		for (Wohnung w : listWohnung)
+		{
+
+			System.out.println(w);
 		}
-	}
-}
+		System.out.println("Geben den ID der Wohnung ein:");
+		Scanner scan= new Scanner(System.in);
+		int id=scan.nextInt();
+		Wohnung w=(Wohnung)session.get(Wohnung.class, id);
+		w.setId(id);
+		session.delete(w);
+		session.getTransaction().commit();
+
+	}}

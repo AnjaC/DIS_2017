@@ -31,5 +31,6 @@
 		</union-subclass>	
 	</class>
 	<query name="alle_haeuser">from Haus</query>
+	<query name="alle_wohnungen">from Wohnung</query>
 
 </hibernate-mapping>

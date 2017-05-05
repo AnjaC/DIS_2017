@@ -132,6 +132,7 @@ public class PersonEditor {
 			person.setAdresse(newAddress);
 	
 		session.update(person);
+		session.getTransaction().commit();
 //		//Personenauswahlmenü
 //		Menu personSelectionMenu = new PersonSelectionMenu("Person bearbeiten", service.getAllPersons());
 //		int id = personSelectionMenu.show();
@@ -186,6 +187,7 @@ public class PersonEditor {
 		Person p=(Person)session.get(Person.class, id);
 		p.setId(id);
 		session.delete(p);
+		session.getTransaction().commit();
 
 	}
 		

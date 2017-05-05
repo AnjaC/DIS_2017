@@ -57,6 +57,13 @@ public class Wohnung extends Immobilie {
 	public void setEbk(boolean ebk) {
 		this.ebk = ebk;
 	}
+	 @Override
+	  public String toString()
+	  {
+		
+		String wohnung="Stockwerke:"+this.stockwerk+" "+"Mietpreis:"+this.mietpreis+" "+"Zimmer:"+this.zimmer+"Balkon"+this.balkon+"EbK:"+this.ebk+
+				"Ort:"+this.getOrt()+" "+"PLZ:"+this.getPlz()+"Strasse:"+this.getStrasse()+""+"Hausnummer"+this.getHausnummer()+""+"Verwalter:"+this.getVerwalter()+" "+"Flaeche:"+this.getFlaeche()+" "+"ID:"+this.getId();
+	    return wohnung;}
 	
 	public int hashCode() {
 		final int prime = 31;
