@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 import de.dis2013.util.Helper;
 
@@ -15,7 +16,8 @@ import de.dis2013.util.Helper;
  * Makler-Bean
  */
 @Entity
-@Table(name="makler")
+@Table(name="makler",uniqueConstraints=
+	@UniqueConstraint(columnNames={"login"}))
 public class Makler {
 	private int id;
 	private String name;
@@ -53,7 +55,8 @@ public class Makler {
 	public void setAdresse(String adresse) {
 		this.adresse = adresse;
 	}
-@Column(name="login", nullable=false)
+@Column(name="login",unique=true)
+
 	public String getLogin() {
 		return login;
 	}

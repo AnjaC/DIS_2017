@@ -2,6 +2,9 @@ package de.dis2013.editor;
 
 
 import java.io.Serializable;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
 
@@ -82,11 +85,38 @@ public class MaklerEditor {
 		session.beginTransaction();
 		
 		Makler m = new Makler();
-		
-		
+	
+//		Makler makler=(Makler) session.createQuery("from Makler where login LIKE :login").setParameter("login", "%"+m.getName()+"%");
 		m.setName(FormUtil.readString("Name"));
 		m.setAdresse(FormUtil.readString("Adresse"));
 		m.setLogin(FormUtil.readString("Login"));
+//		String login1=m.getLogin();
+////		 7ama=(ArrayList<Makler>) session.createQuery("from Makler where login LIKE :login").setParameter("login", "%"+m.getLogin()+"%");
+//		List<String> listMakler = session.getNamedQuery("select login from Makler").list();
+//		Iterator iter=listMakler.iterator();
+////		Iterator<String>makler1=session.createQuery("select login from Makler").iterate();
+////		String login2=makler1.toString();
+////		System.out.println(login2);
+//		
+//		while(String listMakler: listMakler){
+//			makler1.next();
+//		System.out.println(login1);
+//			if(login2==login1){
+//				System.out.println("Benutzer existiert bereits");
+				
+//				System.out.println("Login gibt es bereits");
+//				
+//			}}
+//			else 
+		
+
+//		Iterator<Makler>makler=session.createQuery(" from Makler where login LIKE :login").setParameter("login", "%"+m.getLogin()+"%").iterate();
+//		while(makler.hasNext()){
+//			System.out.println(makler.next());
+//		}
+//		if (makler.equals(null)){
+//			System.out.println("test");
+//		}
 		m.setPasswort(FormUtil.readString("Passwort"));
 		session.persist(m);
 		session.save(m);
@@ -95,11 +125,11 @@ public class MaklerEditor {
 		//tx.commit();
 		//service.addMakler(m);
 		
-		System.out.println("Makler mit der ID "+m.getId()+" wurde erzeugt.");
+		System.out.println("Makler mit der ID "+m.getId()+" wurde erzeugt.");}
 		//if(session!=null){
 			//session.close();
 			//session.createQuery("SHUTDOWN").executeUpdate();
-		}
+		
 	
 	
 	/**
@@ -173,7 +203,7 @@ public class MaklerEditor {
 
 			System.out.println(makler);
 		}
-		System.out.println("Geben den ID der Person ein:");
+		System.out.println("Geben den ID des Maklers ein:");
 		Scanner scan= new Scanner(System.in);
 		int id=scan.nextInt();
 		Makler m=(Makler)session.get(Makler.class, id);

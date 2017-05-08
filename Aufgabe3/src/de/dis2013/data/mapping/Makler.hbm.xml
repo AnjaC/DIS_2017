@@ -7,9 +7,11 @@
 		<id name="id" column="id">
 			<generator class="native" />
 		</id>
+		<properties name="login" unique="true">
+		<property name="login" type="string" column="login"/> </properties>
 		<property name="name" type="string" column="name" />
 		<property name="adresse" type="string" column="adresse" />
-		<property name="login" type="string" column="login" />
+		
 		<property name="passwort" type="string" column="passwort" />
 		
 		<set name="immobilien" inverse="true">
@@ -18,4 +20,5 @@
 		</set>
 	</class>
 	<query name="alle_Makler">from Makler</query>
+	<query name="makler">select id from Makler where login=?</query>
 </hibernate-mapping>

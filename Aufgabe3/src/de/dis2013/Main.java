@@ -43,10 +43,10 @@ public class Main {
 		
 		//Authentifizierungsmöglichkeiten
 		PropertiesFileAuthenticator pfa = new PropertiesFileAuthenticator("admin.properties");
-		MaklerAuthenticator ma = new MaklerAuthenticator(service);
+		MaklerAuthenticator ma = new MaklerAuthenticator();
 		
 		//Testdaten
-		service.addTestData();
+		//service.addTestData();
 		
 		//Verarbeite Eingabe
 		while(true) {
